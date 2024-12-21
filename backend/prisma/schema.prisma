@@ -7,10 +7,48 @@ generator client {
   provider = "prisma-client-js"
 }
 
+model User {
+  id         Int       @id @default(autoincrement())
+  name       String
+  email      String    @unique
+  password   String
+  role       Role      @default(USER)
+  created_at DateTime  @default(now())
+  events     Event[]
+  alerts     ThresholdAlert[]
+}
+
+model EventType {
+  id          Int       @id @default(autoincrement())
+  name        String    @unique
+  description String?
+  events      Event[]
+  alerts      ThresholdAlert[]
+}
+
 model Event {
-  id        Int      @id @default(autoincrement())
-  type      String
-  userId    Int?     // Nullable for anonymous events
-  timestamp DateTime @default(now())
-  metadata  Json
+  id         Int       @id @default(autoincrement())
+  type_id    Int
+  type       EventType @relation(fields: [type_id], references: [id])
+  user_id    Int?
+  user       User?     @relation(fields: [user_id], references: [id])
+  timestamp  DateTime  @default(now())
+  metadata   Json?
+}
+
+model ThresholdAlert {
+  id         Int       @id @default(autoincrement())
+  user_id    Int
+  user       User      @relation(fields: [user_id], references: [id])
+  type_id    Int
+  type       EventType @relation(fields: [type_id], references: [id])
+  threshold  Int
+  duration   Int       // Duration in seconds
+  created_at DateTime  @default(now())
+}
+
+enum Role {
+  ADMIN
+  USER
+  VIEWER
 }
