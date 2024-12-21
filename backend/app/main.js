@@ -4,6 +4,7 @@ import http from 'http';
 import { Server } from 'socket.io';
 import authRoutes from './routes/auth.js';
 import eventRoutes from './routes/events.js';
+import eventAnalyticsRoutes from './routes/eventAnalytics.js';
 import { errorHandler } from './utils/errorHandler.js';
 
 const app = express();
@@ -14,6 +15,7 @@ app.use(cors());
 app.use(express.json());
 app.use('/api/auth', authRoutes);
 app.use('/api/events', eventRoutes);
+app.use('/api/events/analytics', eventAnalyticsRoutes);
 
 app.use(errorHandler);
 

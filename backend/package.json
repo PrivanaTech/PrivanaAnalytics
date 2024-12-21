@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon app/main.js",
-    "test": "jest"
+    "test": "jest",
+    "seed": "node prisma/seed.js",
+    "clean": "node prisma/clean.js"
   },
   "keywords": [],
   "author": "",
